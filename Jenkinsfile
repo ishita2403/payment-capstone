@@ -11,21 +11,24 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                echo 'Building and testing Payment Engine...'
-                sh 'python3 --version'
-                sh 'git --version'
-                echo 'Initial environment checks passed!'
+                echo 'Running Payment Engine automated tests...'
+
+                sh '''
+                    python3 -m venv .venv
+                    .venv/bin/python -m pip install -r backend/requirements.txt pytest
+                    .venv/bin/python -m pytest tests/ -v
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Jenkins Pipeline SUCCESSFUL!'
+            echo 'All automated tests PASSED!'
         }
 
         failure {
-            echo 'Jenkins Pipeline FAILED!'
+            echo 'Pipeline FAILED!'
         }
     }
 }
