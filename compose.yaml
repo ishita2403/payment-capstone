@@ -1,0 +1,22 @@
+services:
+  payment-backend:
+    build: ./backend
+    image: payment-engine:capstone
+    ports:
+      - "5000:5000"
+    networks:
+      - payment-network
+
+  payment-frontend:
+    build: ./frontend
+    image: payment-frontend:capstone
+    ports:
+      - "8081:80"
+    depends_on:
+      - payment-backend
+    networks:
+      - payment-network
+
+networks:
+  payment-network:
+    driver: bridge
